@@ -4,17 +4,15 @@ function set_tooltips(svg,x,y){
         .on('mouseover',function(d,i){
             var id = d['time'].toString().replace(/ /g,'')+d.r.toString()
             id = id.replace(/:/g,'').replace(/\(/g,'').replace(/\)/g,'').replace(/-/g,'')
-            d3.select('#'+id).style('stroke','yellow')
-            d3.select('#'+id).style('fill','yellow')
-            d3.select('#'+id).attr('x',function(){
-                return x(d['time'])-10
-            })
-            d3.select('#'+id).attr('width','20')
-
-            d3.select('#'+id).attr('y',function(){
-                return y(d.r)-10
-            })
-            d3.select('#'+id).attr('height','20')
+            console.log(d3.select('#'+id))
+            d3.select('#'+id).transition()
+                .duration(0)
+                .attr('x',0)
+                .attr('width','20')
+                .attr('y',0)
+                .attr('height','20')
+                .style('stroke','yellow')
+                .style('fill','yellow')
 
 
             var g = svg.append('g')
