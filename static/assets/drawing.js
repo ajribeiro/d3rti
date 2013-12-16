@@ -1,10 +1,79 @@
+function set_tooltips(svg,x,y){
+
+    d3.selectAll(".cell")
+        .on('mouseover',function(d,i){
+            var id = d['time'].toString().replace(/ /g,'')+d.r.toString()
+            id = id.replace(/:/g,'').replace(/\(/g,'').replace(/\)/g,'').replace(/-/g,'')
+            d3.select('#'+id).style('stroke','yellow')
+            d3.select('#'+id).style('fill','yellow')
+            d3.select('#'+id).attr('x',function(){
+                return x(d['time'])-10
+            })
+            d3.select('#'+id).attr('width','20')
+
+            d3.select('#'+id).attr('y',function(){
+                return y(d.r)-10
+            })
+            d3.select('#'+id).attr('height','20')
+
+
+            var g = svg.append('g')
+                    .attr("id", 'n'+id)
+
+            var ibox = g.append('rect')
+                .attr('class','infobox')
+                .attr("x",function(a,b){
+                    return x(d['time'])-75;
+                })
+                .attr("y",function(a) {
+                    return y(d.r)-75;
+                })
+                .attr('width',400)
+                .attr('height',75)
+                .style('fill','black')
+
+            g.append('text')
+                .text(function(){
+                    return d['time'].toString().slice(0,24)+' Range Gate: '+d.r
+                })
+                .attr('class','infotext')
+                .attr('x',function(){
+                    return x(d['time'])+125;
+                })
+                .attr('y',function(){
+                    return y(d.r)-45;
+                })
+
+            g.append('text')
+                .text(function(){
+                    return 'vel: '+Math.round(d.v).toString()+
+                            ' wid: '+Math.round(d.w_l).toString()+
+                            ' pow: '+Math.round(d.p_l).toString()
+                })
+                .attr('class','infotext')
+                .attr('x',function(){
+                    return x(d['time'])+125;
+                })
+                .attr('y',function(){
+                    return y(d.r)-20;
+                })
+        })
+        .on("mouseout", function(d){
+            var id = d['time'].toString().replace(/ /g,'')+d.r.toString()
+            id = id.replace(/:/g,'').replace(/\(/g,'').replace(/\)/g,'').replace(/-/g,'')
+            d3.select('#'+id).style('stroke','white')
+            d3.select("#n" + id)
+                .remove();
+        });
+}
+
 function draw_rti(data){
     var svg = d3.select('#chart')
         .append('svg')
         .attr('class','rti')
         .attr('id','rtiplot')
-        .attr('height',2000)
-        .attr('width',2000)
+        .attr('height',xmargin*2+width)
+        .attr('width',ymargin*2+width)
         .attr('x',xmargin)
         .attr('y',ymargin)
 
@@ -36,11 +105,12 @@ function draw_rti(data){
             tempdata.push(d)
         }
     }
-
+    console.log('adding cells')
     var cells = svg.selectAll('rect.cell')
             .data(tempdata)
             .enter()
-            .append('rect.cell')
+            .append('rect')
+            .attr('class','cell')
             .attr('x', function(d){
                 return x(d['time'])
             })
@@ -49,8 +119,7 @@ function draw_rti(data){
             })
             .attr('width',function(d){
                 var ind = times.indexOf(d['time'])+1
-                console.log(x(times[ind]),x(d['time']))
-                if(ind < times.length) return Math.ceil(x(times[ind])-x(d['time']))
+                if(ind < times.length) return (x(times[ind])-x(d['time']))
                 else return 1
             })
             .attr('height',function(d){
@@ -58,6 +127,8 @@ function draw_rti(data){
             })
             .style('stroke','white')
             .style('fill','white')
+
+    set_tooltips(svg,x,y)
 
     // var time_axis = d3.svg.axis()
     //     .scale(time_scale);
@@ -107,44 +178,3 @@ function draw_rti(data){
 
 
 
-// function set_tooltips(x,y){
-
-//     d3.selectAll(".cell")
-//         .on('mouseover',function(d,i){
-//             idnum = d['time'].toString().replace(' ','')+d.r.toString()
-//             d3.select('#'+idnum).style('stroke','yellow')
-
-//             var g = svg.append('g')
-//                     .attr("id", 'n'+idnum)
-
-//             var ibox = g.append('rect')
-//                 .attr('class','infobox')
-//                 .attr("x",function(a,b){
-//                     return x(d['time']);
-//                 })
-//                 .attr("y",function(a) {
-//                     return y(d.r)-75;
-//                 })
-//                 .attr('width',250)
-//                 .attr('height',50)
-//                 .style('fill','black')
-
-//             g.append('text')
-//                 .text(function(){
-//                     return 'info'
-//                 })
-//                 .attr('class','infotext')
-//                 .attr('x',function(){
-//                     return x(d['time'])+125;
-//                 })
-//                 .attr('y',function(){
-//                     return y(d.r)-45;
-//                 })
-//         })
-//         .on("mouseout", function(d){
-//             idnum = d['time'].toString().replace(/ /g,'')+d.r.toString()
-//             d3.select('#'+idnum).style('stroke','white')
-//             d3.select("#n" + idnum)
-//                 .remove();
-//         });
-// }
