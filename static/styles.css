@@ -1,0 +1,277 @@
+body{
+        font-family:Arial,Helvetica,sans-serif;
+background-color: black;
+color: white;
+}
+
+
+div.barchart{
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:0.7em;
+}
+
+rect.bar {
+    fill:none;
+    stroke:white;
+    height:3em;
+    width:3em;
+    line-height:3em;
+    padding-right:2em;
+    margin-bottom:2px;
+    text-align:right;
+    margin-left:22em;
+    cursor:pointer;
+    stroke-width:2px;
+}
+
+div.label {
+    height:3em;
+    line-height:3em;
+    padding-right:1em;
+    margin-bottom:2px;
+    float:left;
+    width:20em;
+    text-align:right;
+}
+
+text.nametip {
+    font-size: 17px;
+    text-align: center;
+    stroke:red;
+    fill:red;
+    text-anchor:right;
+}
+text{
+    fill:white;
+    stroke:white;
+}
+text.pname{
+    text-anchor:end;
+}
+
+.axis {
+    font-family: arial;
+    font-size:1em;
+    color: white;
+}
+path {
+    fill:none;
+    stroke:white;
+    stroke-width:2px;
+}
+.tick {
+    fill:white;
+    stroke:white;
+}
+
+rect.arrbar{
+    stroke:black;
+    fill:#D9D9D9;
+    opacity: .2;
+}
+
+rect.twoarrbar{
+    stroke:black;
+    fill:gray;
+    opacity: .2;
+}
+
+line.arr{
+    stroke-width:5;
+    stroke: white;
+    fill: white;
+    stroke-linecap:round;
+
+}
+text.key_name{
+    font-size:17px;
+    stroke:white;
+    fill:white;
+    cursor: help;
+}
+text.key_name_hi{
+    font-size:17px;
+    stroke:green;
+    fill:green;
+    cursor: help;
+}
+rect.key_box{
+    height:10px;
+    width:10px;
+    stroke:white;
+    stroke-width:2;
+    cursor: pointer;
+}
+
+rect.infobox {
+    width: 200px;
+    padding: 10px;
+    fill: none;
+    stroke:white;
+    stroke-width:2px;
+}
+
+text.infotext{
+    fill:white;
+    stroke:white;
+    text-anchor:middle;
+}
+
+.tabnav {
+  margin: 50px;
+  width: 950px;
+  border-bottom: 2px solid white;
+  height: 35px;
+  text-align: right;
+  position: relative;
+  z-index: 1;
+  -moz-user-select: none; 
+  -khtml-user-select: none; 
+  -webkit-user-select: none; 
+  -o-user-select: none;
+}
+
+.tabnav-tabs li{
+  display: inline-block;
+  padding: 8px 12px;
+  margin-bottom: -1px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tabnav-tabs .selected {
+  border-color: #555;
+  border-radius: 3px 3px 0 0;
+  background-color: white;
+  color: #000;
+}
+
+path{
+  fill:none;
+}
+.nav{
+    cursor: pointer;
+}
+
+.H{  
+  fill:#FFFFFF;
+  stroke:#FFFFFF;
+}
+
+.HR{
+  fill:#FF6600;
+  stroke:#FF6600;
+}
+
+.WAR{
+  fill:#FF3399;
+  stroke:#FF3399;
+}
+
+.RBI{
+  fill:#0000FF;
+  stroke:#0000FF;
+}
+
+.SB{
+  fill:#33FF00;
+  stroke:#33FF00;
+}
+
+.ISO{
+  fill:#CCCCFF;
+  stroke:#CCCCFF;
+}
+
+.wOBA{
+  fill:#FF0000;
+  stroke:#FF0000;
+}
+
+.wRC{
+  fill:#66FFCC;
+  stroke:#66FFCC;
+}
+
+.R{
+  fill:#FF9999;
+  stroke:#FF9999;
+}
+
+.BB{
+  fill:#996633;
+  stroke:#996633;
+}
+
+.K{
+  fill:#336666;
+  stroke:#336666;
+}
+
+.AVG{
+  fill:#660099;
+  stroke:#660099;
+}
+
+.OBP{
+  fill:#CCFFCC;
+  stroke:#CCFFCC;
+}
+
+.SLG{
+  fill:#FFFF66;
+  stroke:#FFFF66;
+}
+
+.wRC{
+  fill:#66FFCC;
+  stroke:#66FFCC;
+}
+
+.node{
+  stroke: white;
+  fill: white;
+}
+
+.link{
+  stroke:white;
+  fill:white;
+}
+
+.left-content {
+  display: none;
+  position: absolute;
+  max-width: 800px;
+  top: 5%;
+  right: 5%;
+  bottom: 5%;
+  text-align: left;
+  padding: 10px;
+  background-color: rgba(60,60,70,0.98);
+  height: 75%;
+  overflow-y: scroll;
+  font-size: 14px;
+  border-radius: 3px;
+  border: 1px solid #888;
+  z-index: 10;
+}
+a:visited
+{ 
+  color:yellow;
+}
+
+.left-content-control {
+  margin-right: 5px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 3px 3px 0 0;
+  background-color: rgba(60,60,70,0.3);
+  cursor: pointer;
+  z-index: -1;
+  -moz-user-select: none; 
+  -khtml-user-select: none; 
+  -webkit-user-select: none; 
+  -o-user-select: none;
+}

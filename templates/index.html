@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<HTML>
+
+<HEAD>
+    <META CHARSET="utf-8">
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+    <script type="text/javascript" src='static/jquery/jquery-2.0.3.js'></script>
+    <script SRC="static/d3/d3.v3.js"></script>
+    <script type="text/javascript" src='/static/assets/drawing.js'></script>
+    <script type="text/javascript" src='/static/assets/misc.js'></script>
+    
+    <SCRIPT>
+        var yr = 2011, mon=1, day=1, rad='bks'
+        var xmargin = 150, ymargin = 150
+        var width = 700, height = 400
+        var data = []
+        var tempdata = null
+        var bmnum = 6
+        var ptype = 'v'
+        function load_data() {
+            var request = {'yr': yr, 'mon':mon, 'day':day, 'rad': rad}
+            $.getJSON('/_load_sd_data', request, function(ps){
+                tempdata = ps.result
+                for(var i=0; i<tempdata.length; i++){
+                    data.push({})
+                    data[i]['nrang'] = tempdata[i]['nrang']
+                    data[i]['bmnum'] = tempdata[i]['bmnum']
+                    data[i]['slist'] = tempdata[i]['slist']
+                    data[i]['v'] = tempdata[i]['v']
+                    data[i]['w_l'] = tempdata[i]['w_l']
+                    data[i]['p_l'] = tempdata[i]['p_l']
+                    data[i]['time'] = new Date(tempdata[i]['yr'],
+                        tempdata[i]['mon']-1,
+                        tempdata[i]['day'],
+                        tempdata[i]['hour'],
+                        tempdata[i]['min'],
+                        tempdata[i]['sec'],
+                        tempdata[i]['us']/1000)
+
+                }
+                draw_rti(data)
+            })
+        }
+    </SCRIPT>
+    <TITLE>SuperDARN RTInteractive</TITLE>
+</HEAD>
+<BODY>
+    <div class='tabnav'>
+        <h2>SuperDARN RTInteractive</h2>
+        <ul class='tabnav-tabs'>
+            <li>Search for Player:</li>
+            <li><input type='text' name='pname' id='pname'></input></li>
+            <li><input type='submit' value='Search'></input></li>
+            <li onclick="toggleVisibility('.left-content')" class="left-content-control">About</li>
+            <li id='sea' class='selected'>Seasons</li>
+            <li id='car' class='tab'>Career</li>
+            <li id='play' class='tab'>Player</li>
+        </ul>
+    </div>
+    <div id='chart'></div>
+    <SCRIPT>
+        load_data();
+    </SCRIPT></BODY>
+</HTML>
