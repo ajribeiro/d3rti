@@ -4,61 +4,94 @@
 <HEAD>
     <META CHARSET="utf-8">
     <link rel="stylesheet" type="text/css" href="static/styles.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
     <script type="text/javascript" src='static/jquery/jquery-2.0.3.js'></script>
-    <script SRC="static/d3/d3.v3.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src='/static/assets/js_lib.js'></script>
     <script type="text/javascript" src='/static/assets/drawing.js'></script>
-    <script type="text/javascript" src='/static/assets/misc.js'></script>
-    
+    <script type="text/javascript">
+        window.onload = populateLists;
+    </script>
     <SCRIPT>
-        var yr = 2011, mon=1, day=1, rad='bks'
+        var d = new Date()
+        var yr = d.getYear()+1900, mon=d.getMonth()+1, day=d.getDate(), rad='bks'
         var xmargin = 150, ymargin = 150
-        var width = 700, height = 400
+        var width = 700, height = 400, height2 = 30, range_axis, time_axis
+        var x, y, x2, y2, brush
         var data = []
-        var tempdata = null
-        var bmnum = 6
+        var tempdata = null, beams = null, maxrange = null
+        var bmnum = null
+        var colscl = ['#4000FF','#0000FF','#00BFFF','#00FF40','#F7FE2E','#FF4000','#FF0000']
+        var velcol = ['#00FF40','#F7FE2E','#FF4000','#FF0000','#4000FF','#0000FF','#00BFFF','#81F7F3']
         var ptype = 'v'
-        function load_data() {
-            var request = {'yr': yr, 'mon':mon, 'day':day, 'rad': rad}
-            $.getJSON('/_load_sd_data', request, function(ps){
-                tempdata = ps.result
-                for(var i=0; i<tempdata.length; i++){
-                    data.push({})
-                    data[i]['nrang'] = tempdata[i]['nrang']
-                    data[i]['bmnum'] = tempdata[i]['bmnum']
-                    data[i]['slist'] = tempdata[i]['slist']
-                    data[i]['v'] = tempdata[i]['v']
-                    data[i]['w_l'] = tempdata[i]['w_l']
-                    data[i]['p_l'] = tempdata[i]['p_l']
-                    data[i]['time'] = new Date(tempdata[i]['yr'],
-                        tempdata[i]['mon']-1,
-                        tempdata[i]['day'],
-                        tempdata[i]['hour'],
-                        tempdata[i]['min'],
-                        tempdata[i]['sec'],
-                        tempdata[i]['us']/1000)
-
-                }
-                draw_rti(data)
-            })
-        }
+        var sclmax = null
+        types = ['v','w_l','p_l']
+        defmaxs = [300,210,28]
     </SCRIPT>
     <TITLE>SuperDARN RTInteractive</TITLE>
 </HEAD>
 <BODY>
-    <div class='tabnav'>
-        <h2>SuperDARN RTInteractive</h2>
-        <ul class='tabnav-tabs'>
-            <li>Search for Player:</li>
-            <li><input type='text' name='pname' id='pname'></input></li>
-            <li><input type='submit' value='Search'></input></li>
-            <li onclick="toggleVisibility('.left-content')" class="left-content-control">About</li>
-            <li id='sea' class='selected'>Seasons</li>
-            <li id='car' class='tab'>Career</li>
-            <li id='play' class='tab'>Player</li>
-        </ul>
-    </div>
-    <div id='chart'></div>
-    <SCRIPT>
-        load_data();
-    </SCRIPT></BODY>
+
+    <form id='plotForm' method='get', action='_noop'>
+        <div class='tabnav'>
+            <h2>SuperDARN RTInteractive</h2>
+            <ul class='tabnav-tabs'>
+                <li>Enter a date:</li>
+                <li>Year:</li>
+                <li><select id='yr' onchange="updateDayList()"></select></li>
+
+                <li>Month:</li>
+                <li><select id='mon' onchange="updateDayList()"></select></li>
+
+                <li>Day:</li>
+                <li><select id='day'></select></li>
+
+                <li>Radar:</li>
+                <li><select id="radarN"></select></li>
+
+                <li><input type='submit' value='Plot!'></input></li>
+                <li onclick="toggleVisibility('.left-content')" class="left-content-control">About</li>
+                <!-- <li onclick="toggleVisibility('.left-content')" class="left-content-control">About</li> -->
+            </ul>
+        </div>
+<div onclick="toggleVisibility('.left-content')" class="left-content">
+            <h2>SuperDARN RTInteractive</h2>
+            <p>
+                This is a web app meant to be an interactive display of a SuperDARN RTI Plot
+            </p>
+            <h2>How to use</h2>
+            <p>
+                First, you must choose a date and radar combination, and click plot.  This will then draw an rtiplot.
+                The RTI plot is interactive in the sense that if you mouse over a point, it will give you some information.
+                There will also be controls to the right of the plot which allow you to change the color scale range (+/-),
+                change the beam begin shown, and change the parameter being shown.
+            </p>
+            <h2>Warning</h2>
+            <p>
+                This is still in development.  d3 can take a bit of time to render large datasets, so if it take some time between
+                switching beams, don't be surprised.  Camping beams are especially troublesome.
+            </p>
+            <h2>How it works</h2>
+            <p>
+                The web app is run developed using Flask.  When you click plot, an AJAX request is sent to the flask app (on thr server), which reads data from the VT server using the <a href="https://github.com/vtsuperdarn/davitpy" target="_blank">DaViTPy</a> read routines.  The data is then passed back to the client's browser as an
+                JSON object.  The data is then 
+            </p>
+            <p>
+                I hope you like the project, and the code can be found <a href="https://github.com/ajribeiro/baseball" target="_blank">on GitHub</a>. (click anywhere in this box to close)
+            </p>
+<!-- AddToAny BEGIN -->
+<div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+<a class="a2a_button_reddit"></a>
+<a class="a2a_button_twitter"></a>
+<a class="a2a_button_facebook"></a>
+<a class="a2a_button_google_plus"></a>
+</div>
+<script type="text/javascript" src="//static.addtoany.com/menu/page.js"></script>
+        <div id='chart'></div>
+        <SCRIPT>
+            // load_data();
+        </SCRIPT>
+    </form>
+</BODY>
 </HTML>
